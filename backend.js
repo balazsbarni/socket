@@ -2,17 +2,29 @@
 
 const express = require('express');
 const app = express();
-// const io = require('socket.io')(app);
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
 app.use(express.static('assets'));
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-// io.on()
+io.on('connection', (socket) => {
+  console.log('a user connected');
+  socket.on('disconnect',() => {
+    console.log('user disconnected');
+  });
+});
+
+io.on('connection', function(socket){
+  socket.on('chat message', (msg) => {
+    console.log('message: ' + msg);
+  });
+});
 
 
 
-
-
-app.listen(3000);
+http.listen(3000, () => {
+  console.log('listening on *:3000');
+});
