@@ -44,7 +44,7 @@ jobs:
             staging:
               branch: master
               commands:
-                //leallit + docker leklonozod az uj img, es elinditod -> push heroku 
+                # leallit + docker leklonozod az uj img, es elinditod -> push heroku 
                 - docker stop balazsbarni/socket
                 - docker pull balazsbarni/socket:latest
                 - docker build --rm=false -t registry.heroku.com/balazsbarni/socket/web .
