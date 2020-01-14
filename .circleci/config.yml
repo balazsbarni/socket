@@ -46,6 +46,7 @@ jobs:
               branch: master
               commands:
                 # leallit + docker leklonozod az uj img, es elinditod -> push heroku 
+                - docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
                 - docker stop balazsbarni/socket
                 - docker pull balazsbarni/socket:latest
                 - docker build --rm=false -t registry.heroku.com/balazsbarni/socket/web .
