@@ -1,13 +1,10 @@
 version: 2.1
-orbs:
-  heroku: circleci/heroku@0.0.10
 executors:
   docker-publisher:
     environment:
       IMAGE_NAME: balazsbarni/socket
     docker:
       - image: circleci/buildpack-deps:stretch
-
 jobs:
   build:
     executor: docker-publisher
@@ -48,21 +45,14 @@ jobs:
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/mocking.tar
-      - run: 
-          name: install heroku
-          command: |
-            if [[ $(command -v heroku) == "" ]]; then
-              curl https://cli-assets.heroku.com/install.sh | sh
-            else
-              echo "Heroku is already installed. No operation was performed."
-            fi
       - run:
           name: Publish Docker Image to Heroku
           command: |
-            docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
-            docker tag balazsbarni/socket:latest registry.heroku.com/$HEROKU_APP_NAME/web
-            docker push registry.heroku.com/$HEROKU_APP_NAME/web
-            heroku container:release web -a $HEROKU_APP_NAME
+             docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+             docker tag balazsbarni/socket:latest registry.heroku.com/$HEROKU_APP_NAME/web
+             docker push registry.heroku.com/$HEROKU_APP_NAME/web
+             heroku container:login
+             heroku container:release web
 workflows:
   version: 2
   build-master:
